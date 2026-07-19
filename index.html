@@ -1,81 +1,1949 @@
+```html
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Venha Ver o Pôr do Sol</title>
-    <style>
-        /* CSS Integrado */
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #0a0a0a;
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>ARABE7 - Premium</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Frijole&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ======================================
+    1. VARIÁVEIS DE TEMA DINÂMICAS
+    ====================================== */
+    :root {
+      --theme-color: #a020f0;
+      --theme-color-rgb: 160, 32, 240;
+      --theme-glow: 0 0 20px rgba(160, 32, 240, 0.6);
+      --bg-dark: #070708;
+      
+      /* Liquid Glass Tokens Unificados */
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+      --glass-blur: blur(16px);
+      --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    /* ======================================
+    2. BASE E RESET
+    ====================================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Poppins', Arial, sans-serif;
+      background-color: var(--bg-dark);
+      color: #ffffff;
+      text-align: center;
+      overflow-x: hidden; 
+      position: relative;
+      min-height: 100vh;
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center;
+      transition: background 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 30%, rgba(var(--theme-color-rgb), 0.08) 0%, rgba(0,0,0,0.85) 80%);
+      z-index: -1;
+      pointer-events: none;
+      transition: background 0.8s ease;
+    }
+
+    /* Canvas de Partículas Interativas */
+    #particles-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    /* Animações Modernas */
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(var(--theme-color-rgb), 0.4); }
+      50% { box-shadow: 0 0 30px rgba(var(--theme-color-rgb), 0.8); }
+    }
+
+    @keyframes textGlow {
+      0%, 100% { text-shadow: 0 0 10px rgba(var(--theme-color-rgb), 0.5); }
+      50% { text-shadow: 0 0 25px rgba(var(--theme-color-rgb), 0.9); }
+    }
+
+    /* Animação para surgimento de elementos */
+    .fade-in-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    
+    .fade-in-up.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    section {
+      padding: 30px 0;
+      position: relative;
+    }
+    
+    /* Barra de rolagem customizada */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--theme-color);
+      border-radius: 10px;
+    }
+    
+    /* ======================================
+    3. HEADER E PERFIL
+    ====================================== */
+    .header-img-container {
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      max-height: 280px;
+      min-height: 160px;
+    }
+
+    .header-img {
+      width: 100%;
+      height: 100%;
+      max-height: 280px;
+      object-fit: cover;
+      filter: brightness(0.8);
+      transition: all 0.8s ease;
+    }
+
+    .header-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 120px;
+      background: linear-gradient(to top, var(--bg-dark), transparent);
+    }
+
+    .profile-pic-container {
+      position: relative;
+      display: inline-block;
+      margin-top: -70px;
+      z-index: 10;
+    }
+
+    .profile-pic {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      border: 4px solid var(--theme-color);
+      cursor: pointer;
+      box-shadow: var(--theme-glow);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.5s ease;
+      background: #000;
+      object-fit: cover;
+      animation: pulseGlow 3s infinite;
+    }
+
+    .profile-pic:hover {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    h1 {
+      font-size: 3em;
+      font-weight: 800;
+      letter-spacing: 5px;
+      margin-top: 15px;
+      color: #ffffff;
+      animation: textGlow 3s infinite;
+    }
+
+    .phone {
+      margin: 15px auto;
+      font-size: 16px;
+      color: #ccc;
+      cursor: pointer;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      background: var(--glass-bg);
+      padding: 10px 22px;
+      border-radius: 30px;
+      border: var(--glass-border);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      box-shadow: var(--glass-shadow);
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .phone:hover {
+      background: rgba(var(--theme-color-rgb), 0.15);
+      border-color: var(--theme-color);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(var(--theme-color-rgb), 0.3);
+    }
+
+    /* ======================================
+    4. BOTÕES E COMPONENTES GLASS
+    ====================================== */
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 25px;
+      flex-wrap: wrap;
+      padding: 0 20px;
+    }
+
+    .button {
+      background-color: var(--glass-bg);
+      border: var(--glass-border);
+      border-radius: 14px;
+      padding: 14px 22px;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      box-shadow: var(--glass-shadow);
+    }
+
+    .button:hover {
+      background-color: rgba(var(--theme-color-rgb), 0.12);
+      border-color: var(--theme-color);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(var(--theme-color-rgb), 0.3);
+    }
+    
+    .button.buy-now {
+        background-color: var(--theme-color);
+        border: none;
+        box-shadow: 0 4px 15px rgba(var(--theme-color-rgb), 0.4);
+    }
+
+    .button.buy-now:hover {
+        background-color: #ffffff;
+        color: #000000;
+        box-shadow: 0 8px 25px rgba(var(--theme-color-rgb), 0.6);
+    }
+
+    .button.add-to-cart {
+        background-color: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--theme-color);
+        padding: 10px 12px;
+        font-size: 11px;
+        flex-grow: 1;
+        justify-content: center;
+    }
+    
+    .button.add-to-cart:hover {
+        background-color: rgba(var(--theme-color-rgb), 0.25);
+    }
+
+    .button img {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    /* Caixa de IP Terminal Style - Liquid Glass */
+    .ip-box {
+        margin: 25px auto;
+        background-color: var(--glass-bg);
+        backdrop-filter: var(--glass-blur);
+        -webkit-backdrop-filter: var(--glass-blur);
+        border: var(--glass-border);
+        border-radius: 16px;
+        padding: 18px 25px;
+        max-width: 380px;
+        box-shadow: var(--glass-shadow);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .ip-box:hover {
+        transform: translateY(-3px);
+        border-color: var(--theme-color);
+        box-shadow: 0 8px 25px rgba(var(--theme-color-rgb), 0.25);
+    }
+
+    .ip-value {
+        font-size: 22px;
+        font-weight: 600;
+        color: #eee;
+        font-family: 'Courier New', monospace;
+        letter-spacing: 2px;
+        user-select: none;
+        transition: color 0.3s;
+    }
+    
+    .eye-button {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        padding: 8px;
+        cursor: pointer;
+        color: #aaa;
+        transition: all 0.3s ease;
+    }
+
+    .eye-button:hover {
+        background: rgba(var(--theme-color-rgb), 0.25);
+        color: #fff;
+        transform: scale(1.1);
+    }
+    
+    .eye-icon svg {
+        width: 20px;
+        height: 20px;
+        display: block;
+    }
+    
+    /* Barra de Pesquisa Glassmorphism */
+    #searchBar {
+        width: 90%;
+        max-width: 450px;
+        padding: 14px 22px;
+        margin: 25px auto;
+        display: block;
+        background: var(--glass-bg);
+        border: var(--glass-border);
+        backdrop-filter: var(--glass-blur);
+        -webkit-backdrop-filter: var(--glass-blur);
+        border-radius: 16px;
+        color: white;
+        font-size: 16px;
+        box-shadow: var(--glass-shadow);
+        transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    #searchBar::placeholder {
+        color: #888;
+    }
+
+    #searchBar:focus {
+        outline: none;
+        border-color: var(--theme-color);
+        background: rgba(255, 255, 255, 0.06);
+        box-shadow: 0 0 20px rgba(var(--theme-color-rgb), 0.35);
+    }
+
+    /* ======================================
+    5. PLAYER DE MÚSICA DO SPOTIFY - Liquid Glass
+    ====================================== */
+    .spotify-player-container {
+      width: 90%;
+      max-width: 500px;
+      margin: 30px auto;
+      padding: 15px;
+      background: var(--glass-bg);
+      border: var(--glass-border);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-radius: 20px;
+      box-shadow: var(--glass-shadow);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .spotify-player-container:hover {
+      transform: translateY(-5px);
+      border-color: var(--theme-color);
+      box-shadow: 0 15px 35px rgba(var(--theme-color-rgb), 0.25);
+    }
+
+    .spotify-player-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding: 0 8px;
+    }
+
+    .spotify-title {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-transform: uppercase;
+    }
+
+    .spotify-icon {
+      color: #1DB954;
+      animation: rotateIcon 4s linear infinite;
+    }
+
+    @keyframes rotateIcon {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .spotify-player-iframe {
+      border-radius: 12px;
+      overflow: hidden;
+      border: none;
+      width: 100%;
+    }
+
+    /* ======================================
+    6. PRODUTOS E CARDS ANIMADOS - Liquid Glass
+    ====================================== */
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+      padding: 0 20px;
+    }
+    
+    .product-card {
+      background-color: var(--glass-bg);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--glass-shadow);
+      border: var(--glass-border);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 12px 30px rgba(var(--theme-color-rgb), 0.25);
+      border-color: rgba(var(--theme-color-rgb), 0.4);
+    }
+
+    .product-info {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: space-between;
+    }
+
+    .product-title {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #fff;
+      line-height: 1.4;
+      text-align: left;
+    }
+
+    .product-price {
+      font-size: 15px;
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    .product-price del {
+      color: #666;
+      margin-right: 8px;
+    }
+
+    .product-price span {
+      color: var(--theme-color); 
+      font-weight: 800;
+      font-size: 1.25em;
+      transition: color 0.5s ease;
+    }
+
+    .product-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+    }
+    
+    .product-details {
+        font-size: 12px;
+        text-align: left;
+        margin-top: 5px;
+        color: #777;
+    }
+    
+    .product-details .stock-low {
+        color: #ff9900;
+        font-weight: bold;
+    }
+    
+    .product-details .saved-money {
+        color: #00ff00;
+        font-weight: bold;
+    }
+    
+    /* ======================================
+    7. SEPARADORES DE SEÇÃO
+    ====================================== */
+    .section-separator-container {
+      width: 100%; 
+      text-align: center; 
+      margin: 50px 0; 
+      position: relative;
+    }
+
+    .separator-line {
+      width: 100%; 
+      height: 1px; 
+      background: linear-gradient(90deg, transparent, rgba(var(--theme-color-rgb), 0.6), transparent);
+      transition: background 0.5s ease;
+    }
+
+    .separator-band {
+      width: 100%;
+      height: 60px;
+      position: relative;
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .separator-title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 5px;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(var(--theme-color-rgb), 0.5);
+      transition: text-shadow 0.5s ease;
+    }
+    
+    .info-boxes-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .info-box {
+      background-color: var(--glass-bg);
+      border: var(--glass-border);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: left;
+      box-shadow: var(--glass-shadow);
+      border-left: 4px solid var(--theme-color);
+      transition: border-color 0.5s ease, transform 0.3s;
+    }
+
+    .info-box:hover {
+      transform: translateX(4px);
+    }
+
+    .info-box h2 {
+      margin-bottom: 10px;
+      font-size: 18px;
+      background: linear-gradient(90deg, var(--theme-color), #ffffff); 
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .info-box p {
+      color: #bbb;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    /* ======================================
+    8. FLOATING ACTION BUTTONS
+    ===================================== */
+    .glass-btn {
+      position: fixed;
+      right: 20px;
+      width: 52px;
+      height: 52px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 9999;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .glass-btn:hover {
+        transform: scale(1.15) rotate(8deg);
+        background: rgba(var(--theme-color-rgb), 0.25);
+        border-color: var(--theme-color);
+        box-shadow: 0 0 20px rgba(var(--theme-color-rgb), 0.5);
+    }
+
+    #btn-secondary {
+        top: 50px;
+    }
+    
+    #btn-cart {
+        top: 115px; 
+    }
+    
+    #cart-count {
+        position: absolute;
+        top: -3px;
+        right: -3px;
+        background-color: var(--theme-color);
+        color: white;
+        border-radius: 50%;
+        width: 22px;
+        height: 22px;
+        font-size: 11px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 10px rgba(var(--theme-color-rgb), 0.8);
+        transition: background-color 0.5s ease;
+    }
+    
+    #ping-indicador {
+        position: fixed;
+        top: 50px; 
+        left: 20px;
+        padding: 8px 14px;
+        background: rgba(0, 0, 0, 0.85);
+        color: #eee;
+        font-size: 11px;
+        font-weight: 600;
+        border-radius: 30px;
+        z-index: 9998;
+        border: 1px solid rgba(var(--theme-color-rgb), 0.3);
+        backdrop-filter: blur(5px);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: border-color 0.5s ease;
+    }
+    
+    /* TOAST NOTIFICATIONS */
+    #notification-container {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      z-index: 10005;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 320px;
+    }
+
+    .toast-notification {
+      background: rgba(10, 10, 12, 0.95);
+      border-left: 4px solid var(--theme-color);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 10px;
+      font-size: 13px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transform: translateX(120%);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+      border-top: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .toast-notification.active {
+      transform: translateX(0);
+    }
+    
+    /* ======================================
+    9. OVERLAYS / MODAIS - Liquid Glass
+    ====================================== */
+    .overlay-page {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        min-height: 100vh;
+        z-index: 10000; 
+        background: rgba(0, 0, 0, 0.85); 
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        display: none; 
+        padding: 20px;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        overflow-y: auto;
+    }
+    
+    .overlay-page.active {
+        display: flex;
+        opacity: 1;
+    }
+
+    .glass-container {
+        width: 100%;
+        max-width: 500px;
+        padding: 35px;
+        position: relative; 
+        background-color: var(--glass-bg);
+        border: var(--glass-border);
+        backdrop-filter: blur(25px); 
+        -webkit-backdrop-filter: blur(25px);
+        border-radius: 24px;
+        box-shadow: var(--glass-shadow);
+        transform: translateY(40px);
+        opacity: 0;
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.25), opacity 0.4s ease;
+    }
+    
+    .overlay-page.active .glass-container {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    
+    .close-overlay-btn {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #fff;
+        cursor: pointer;
+        font-size: 18px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    
+    .close-overlay-btn:hover {
+        color: #fff;
+        background: var(--theme-color);
+        border-color: var(--theme-color);
+        transform: rotate(90deg) scale(1.1);
+    }
+    
+    /* Estilos do Carrinho */
+    #cart-items {
+        text-align: left;
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        max-height: 250px;
+        overflow-y: auto;
+    }
+    
+    .cart-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+    
+    .cart-item-name {
+        flex-grow: 1;
+        font-size: 14px;
+        color: #fff;
+        font-weight: 500;
+    }
+    
+    .cart-item-price {
+        font-weight: bold;
+        color: var(--theme-color);
+        margin-left: 15px;
+        transition: color 0.5s ease;
+    }
+    
+    .cart-summary {
+        text-align: right;
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        font-size: 15px;
+    }
+    
+    .cart-summary div {
+        margin-bottom: 6px;
+    }
+    
+    .cart-summary .total {
+        font-size: 1.45em;
+        font-weight: 800;
+        color: var(--theme-color);
+        transition: color 0.5s ease;
+    }
+    
+    .cart-summary .economy {
+        font-size: 13px;
+        color: #00ff00;
+        font-weight: 600;
+        margin-top: 5px;
+    }
+
+    .highlight {
+        background-color: rgba(var(--theme-color-rgb), 0.35);
+        padding: 2px 4px;
+        border-radius: 4px;
+        border-bottom: 2px solid var(--theme-color);
+    }
+
+    /* FULLSCREEN OVERLAY */
+    #fullscreen {
+        position: fixed;
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 100%;
+        background: rgba(0,0,0,0.95);
+        z-index: 11000;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        cursor: zoom-out;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    #fullscreen.active {
+        display: flex;
+        opacity: 1;
+    }
+
+    /* BRANDED SECTIONS - Liquid Glass content */
+    .brand-section {
+        background: #09090b; 
+        min-height: 80vh; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        justify-content: center; 
+        padding: 80px 20px; 
+        border-top: 1px solid rgba(var(--theme-color-rgb), 0.15);
+        position: relative;
+    }
+
+    .brand-title-wrap {
+        color: #fff; 
+        font-size: 3.2em; 
+        margin-bottom: 40px; 
+        position: relative; 
+        text-transform: uppercase; 
+        letter-spacing: 6px;
+        font-weight: 800;
+    }
+
+    .brand-glow {
+        position: absolute; 
+        top: 50%; 
+        left: 50%; 
+        transform: translate(-50%,-50%) scale(1.15); 
+        color: var(--theme-color); 
+        opacity: 0.12; 
+        z-index: 1; 
+        font-size: 1.3em;
+        pointer-events: none;
+        transition: color 0.5s ease;
+    }
+
+    .brand-content {
+        max-width: 800px; 
+        color: #ddd; 
+        text-align: left; 
+        background: var(--glass-bg);
+        border: var(--glass-border);
+        backdrop-filter: var(--glass-blur);
+        -webkit-backdrop-filter: var(--glass-blur);
+        padding: 40px;
+        border-radius: 24px;
+        box-shadow: var(--glass-shadow);
+    }
+
+    .brand-content p {
+        font-size: 15px; 
+        line-height: 1.8; 
+        margin-bottom: 22px;
+    }
+
+    .brand-links a {
+        color: var(--theme-color); 
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s;
+    }
+
+    .brand-links a:hover {
+        color: #fff;
+    }
+  </style> 
+
+  <script>
+    // Variável global para o carrinho
+    let cart = []; 
+    
+    // Novo Número de Telefone
+    const newPhoneNumber = '+55 11 98737-0544';
+    const newWhatsAppLink = 'https://wa.me/5511987370544';
+
+    // Array de produtos
+    const productsData = [
+      { id: 1, name: 'Números Whatsapp sem chip', price: 19.90, originalPrice: 29.90 },
+      { id: 2, name: 'Métodos do 7', price: 17.90, originalPrice: 24.90 },
+      { id: 3, name: 'Painéis de Investigações', price: 27.90, originalPrice: 39.90 },
+      { id: 4, name: 'Banners Bolha', price: 14.90, originalPrice: 18.90 }
+    ];
+
+    // ======================================
+    // SISTEMA DE TEMAS ATUALIZADO (RGB VARIANTES)
+    // ======================================
+    const themes = {
+        'arabe7': {
+            name: 'ARABE7',
+            profile: 'https://i.imgur.com/0ZwX8MN.jpeg', 
+            header: 'https://i.imgur.com/c5xOpww.gif',   
+            bodyBg: 'url(https://i.imgur.com/yDLdIsb.jpeg)',
+            color: '#a020f0',
+            rgb: '160, 32, 240'
+        },
+        'neros': {
+            name: 'NERO\'S',
+            profile: 'https://i.imgur.com/HzWmBEs.jpeg', 
+            header: 'https://i.imgur.com/za0akPJ.gif',   
+            bodyBg: 'url(https://i.imgur.com/67rpscY.jpeg)',
+            color: '#ff3333',
+            rgb: '255, 51, 51'
+        },
+        'erethor': {
+            name: 'ERETHOR',
+            profile: 'https://i.imgur.com/eNe7Zxs.jpeg', 
+            header: 'https://i.imgur.com/KAByJrS.gif',   
+            bodyBg: 'url(https://i.imgur.com/E0xrFxB.jpeg)',
+            color: '#00f3ff',
+            rgb: '0, 243, 255'
+        }
+    };
+
+    let currentTheme = 'arabe7';
+    const themeOrder = ['arabe7', 'neros', 'erethor']; 
+
+    function applyInitialTheme(theme) {
+        const profilePicEl = document.getElementById('profilePic');
+        const headerImgEl = document.getElementById('headerImg');
+        const bodyEl = document.body;
+        const themeButton = document.getElementById('themeToggleButton');
+        
+        if (profilePicEl) profilePicEl.src = theme.profile;
+        if (headerImgEl) headerImgEl.src = theme.header;
+        
+        if (bodyEl) {
+            bodyEl.style.backgroundImage = theme.bodyBg;
+        }
+        
+        // Atualiza variáveis globais do CSS para transição suave de cor do site inteiro!
+        document.documentElement.style.setProperty('--theme-color', theme.color);
+        document.documentElement.style.setProperty('--theme-color-rgb', theme.rgb);
+        document.documentElement.style.setProperty('--theme-glow', `0 0 25px rgba(${theme.rgb}, 0.6)`);
+        
+        if (themeButton) {
+            themeButton.innerHTML = `
+                <img src="${theme.profile}" alt="Tema" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;">
+                TEMA: ${theme.name}
+            `;
+        }
+    }
+
+    window.switchTheme = function() {
+        let currentIndex = themeOrder.indexOf(currentTheme);
+        let nextIndex = (currentIndex + 1) % themeOrder.length;
+        let nextThemeKey = themeOrder[nextIndex];
+
+        currentTheme = nextThemeKey;
+        const theme = themes[currentTheme];
+
+        applyInitialTheme(theme);
+        localStorage.setItem('arabe7_theme', currentTheme);
+        showNotification(`Tema alterado para: ${theme.name}`);
+        
+        // Força animações nas marcas d'água de background
+        document.querySelectorAll('.brand-glow').forEach(el => {
+           el.style.color = theme.color;
+        });
+    }
+    
+    // ======================================
+    // TOAST NOTIFICATIONS
+    // ======================================
+    window.showNotification = function(message) {
+        const container = document.getElementById('notification-container');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = 'toast-notification';
+        toast.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--theme-color);"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            <span>${message}</span>
+        `;
+        container.appendChild(toast);
+
+        toast.offsetHeight; // force reflow
+        toast.classList.add('active');
+
+        setTimeout(() => {
+            toast.classList.remove('active');
+            setTimeout(() => {
+                toast.remove();
+            }, 400);
+        }, 3000);
+    }
+
+    // ======================================
+    // FUNÇÕES DO CARRINHO
+    // ======================================
+    function updateCartDisplay() {
+        const itemsContainer = document.getElementById('cart-items');
+        const countEl = document.getElementById('cart-count');
+        const emptyMessage = document.getElementById('empty-cart-message');
+        const subtotalEl = document.getElementById('cart-subtotal');
+        const economyEl = document.getElementById('cart-economy');
+        const totalEl = document.getElementById('cart-total');
+        const checkoutButton = document.getElementById('checkout-button'); 
+
+        if (!itemsContainer || !countEl) return;
+
+        itemsContainer.innerHTML = '';
+        
+        let subtotal = 0;
+        let totalEconomy = 0;
+        let checkoutMessage = "Olá, Árabe! Meu pedido é:\n\n";
+
+        if (cart.length === 0) {
+            if(emptyMessage) emptyMessage.style.display = 'block';
+            countEl.style.display = 'none';
+            countEl.textContent = 0;
+            if (subtotalEl) subtotalEl.textContent = `Subtotal: R$ 0,00`;
+            if (economyEl) economyEl.textContent = `Você economizou: R$ 0,00!`;
+            if (totalEl) totalEl.textContent = `Total: R$ 0,00`;
+        } else {
+            if(emptyMessage) emptyMessage.style.display = 'none';
+            
+            cart.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'cart-item';
+                
+                itemDiv.innerHTML = `
+                    <span class="cart-item-name">${item.name} (<span style="color: var(--theme-color); font-weight:600;">x${item.quantity}</span>)</span>
+                    <span class="cart-item-price">R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</span>
+                    <a href="#" onclick="removeItemFromCart(${item.id}); event.preventDefault();" style="color: #ff3333; text-decoration: none; margin-left: 15px; display: flex; align-items: center;" title="Remover item">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </a>
+                `;
+                itemsContainer.appendChild(itemDiv);
+                
+                subtotal += item.price * item.quantity;
+                totalEconomy += (item.originalPrice - item.price) * item.quantity;
+                
+                checkoutMessage += `- ${item.name} (${item.quantity}x) = R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}\n`;
+            });
+
+            countEl.textContent = cart.reduce((total, item) => total + item.quantity, 0); 
+            countEl.style.display = 'flex';
+            
+            // Animação de pulso no contador
+            countEl.style.transform = 'scale(1.3)';
+            setTimeout(() => countEl.style.transform = 'scale(1)', 300);
+            
+            checkoutMessage += `\nTotal a pagar: R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+            checkoutMessage += `\nEconomia total: R$ ${totalEconomy.toFixed(2).replace('.', ',')}`;
+        }
+        
+        if (subtotalEl && cart.length > 0) subtotalEl.textContent = `Subtotal: R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+        if (economyEl && cart.length > 0) economyEl.textContent = `Você economizou: R$ ${totalEconomy.toFixed(2).replace('.', ',')}!`;
+        if (totalEl && cart.length > 0) totalEl.textContent = `Total: R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+        
+        if (checkoutButton) checkoutButton.href = newWhatsAppLink + '?text=' + encodeURIComponent(checkoutMessage);
+        
+        localStorage.setItem('arabe7_cart', JSON.stringify(cart));
+    }
+    
+    window.addToCart = function(product) {
+        const existingItem = cart.find(item => item.id === product.id);
+        
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            cart.push({ 
+              id: product.id, 
+              name: product.name, 
+              price: product.price, 
+              originalPrice: product.originalPrice, 
+              quantity: 1 
+            });
         }
 
-        .container {
-            max-width: 600px;
-            padding: 20px;
+        updateCartDisplay();
+        showNotification(`"${product.name}" adicionado ao carrinho!`);
+    }
+
+    window.addToCartById = function(id) {
+      const productId = parseInt(id);
+      const product = productsData.find(p => p.id === productId);
+      if (product) {
+          addToCart(product);
+      }
+    }
+
+    window.removeItemFromCart = function(id) {
+      const item = cart.find(i => i.id === id);
+      if (item) {
+          showNotification(`"${item.name}" removido.`);
+      }
+      cart = cart.filter(item => item.id !== id);
+      updateCartDisplay();
+    }
+    
+    window.clearCart = function(event) {
+      event.preventDefault();
+      cart = [];
+      updateCartDisplay();
+      showNotification("Seu carrinho foi esvaziado.");
+    }
+
+    // ======================================
+    // NAVEGAÇÃO MODULAR / OVERLAY
+    // ======================================
+    window.showPage = function(pageId) {
+        const secondaryPage = document.getElementById('secondary-page'); 
+        const cartPage = document.getElementById('cart-page');
+        
+        if (pageId === 'secondary') {
+            if (secondaryPage) {
+                secondaryPage.style.display = 'flex';
+                setTimeout(() => secondaryPage.classList.add('active'), 10);
+            }
+        } else if (pageId === 'cart') { 
+            if (cartPage) {
+                cartPage.style.display = 'flex';
+                setTimeout(() => cartPage.classList.add('active'), 10);
+            }
+        }
+    }
+
+    window.closeOverlay = function(pageId) {
+        const page = document.getElementById(pageId);
+        if (page) {
+            page.classList.remove('active');
+            setTimeout(() => {
+                page.style.display = 'none';
+            }, 400);
+        }
+    }
+
+    window.hideCartOverlay = function(event) {
+      const cartPage = document.getElementById('cart-page');
+      if (!cartPage) return;
+      if (event.target === cartPage || event.target.closest('.close-overlay-btn')) {
+          event.preventDefault(); 
+          closeOverlay('cart-page');
+      }
+    }
+
+    window.hideSecondaryOverlay = function(event) {
+      const secondaryPage = document.getElementById('secondary-page');
+      if (!secondaryPage) return;
+      if (event.target === secondaryPage || event.target.closest('.close-overlay-btn')) {
+          event.preventDefault(); 
+          closeOverlay('secondary-page');
+      }
+    }
+    
+    // ======================================
+    // OUTRAS FUNÇÕES E SISTEMA DE BUSCA
+    // ======================================
+    let ipVisible = false;
+    let realIP = '';
+
+    if (typeof fetch !== 'undefined') {
+        fetch('https://api.ipify.org?format=json')
+          .then(res => res.json())
+          .then(data => realIP = data.ip)
+          .catch(() => realIP = 'IP Desconhecido');
+    }
+
+    window.toggleIP = function() {
+      const ipValueEl = document.getElementById('ipValue');
+      const eyeIconEl = document.getElementById('eyeIcon');
+      if (!ipValueEl || !eyeIconEl) return;
+      
+      ipVisible = !ipVisible;
+      
+      if(ipVisible && realIP === '') {
+        ipValueEl.textContent = 'Buscando...';
+        setTimeout(() => {
+            ipValueEl.textContent = realIP || 'IP Indisponível';
+        }, 500);
+      } else {
+        ipValueEl.textContent = ipVisible ? realIP : '••••••••';
+      }
+      
+      eyeIconEl.innerHTML = ipVisible ? `
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" style="width:20px; height:20px;">
+          <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+          <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd" />
+        </svg>
+      ` : `
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" style="width:20px; height:20px;">
+          <path d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM22.676 12.553a11.249 11.249 0 0 1-2.631 4.31l-3.099-3.099a5.25 5.25 0 0 0-6.71-6.71L7.759 4.577a11.217 11.217 0 0 1 4.242-.827c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113Z" />
+          <path d="M15.75 12c0 .18-.013.357-.037.53l-4.244-4.243A3.75 3.75 0 0 1 15.75 12ZM12.53 15.713l-4.243-4.244a3.75 3.75 0 0 0 4.244 4.243Z" />
+          <path d="M6.75 12c0-.619.107-1.213.304-1.764l-3.1-3.1a11.25 11.25 0 0 0-2.63 4.31c-.12.362-.12.752 0 1.114 1.489 4.467 5.704 7.69 10.675 7.69 1.5 0 2.933-.294 4.242-.827l-2.477-2.477A5.25 5.25 0 0 1 6.75 12Z" />
+        </svg>
+      `;
+    }
+
+    window.copyPhone = function() {
+      const dummy = document.createElement("input");
+      document.body.appendChild(dummy);
+      dummy.value = newPhoneNumber;
+      dummy.select();
+      document.execCommand("copy");
+      document.body.removeChild(dummy);
+      showNotification("Número de telefone copiado! Dominação garantida.");
+    }
+
+    window.showFullscreen = function() { 
+        const profilePicSrc = document.getElementById("profilePic").src;
+        const fs = document.getElementById("fullscreen");
+        if(fs) {
+            fs.innerHTML = `<img src="${profilePicSrc}" style="max-width: 90%; max-height: 90%; border-radius: 20px; box-shadow: var(--theme-glow); border: 2px solid var(--theme-color); transition: border-color 0.5s ease;">`;
+            fs.style.display = "flex";
+            setTimeout(() => fs.classList.add('active'), 10);
+        }
+    }
+    window.hideFullscreen = function() { 
+        const fs = document.getElementById("fullscreen");
+        if(fs) {
+            fs.classList.remove('active');
+            setTimeout(() => {
+                fs.style.display = "none";
+            }, 400);
+        }
+    }
+
+    function verificarPing() {
+      const inicio = performance.now();
+      if (typeof fetch === 'undefined') return;
+
+      fetch("https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png", { mode: 'no-cors' })
+        .then(() => {
+          const fim = performance.now();
+          const ping = Math.round(fim - inicio);
+          const el = document.getElementById("ping-valor");
+          if (!el) return;
+          
+          el.textContent = ping < 25 ? `ESTÁVEL (${ping}ms)` : ping < 70 ? `BOM (${ping}ms)` : ping < 150 ? `INSTÁVEL (${ping}ms)` : `ALTO (${ping}ms)`;
+          el.style.color = ping < 25 ? "#00ff00" : ping < 70 ? "var(--theme-color)" : ping < 150 ? "orange" : "red";
+        })
+        .catch(() => {
+          const el = document.getElementById("ping-valor");
+          if (!el) return;
+          el.textContent = "Sem Conexão";
+          el.style.color = "red";
+        });
+    }
+    
+    function atualizarStatus() {
+      const statusEl = document.getElementById("status");
+      if (!statusEl) return;
+      
+      if (navigator.onLine) {
+        statusEl.textContent = "CONEXÃO SEGURA";
+        statusEl.style.color = "#00ff00";
+      } else {
+        statusEl.textContent = "OFFLINE";
+        statusEl.style.color = "red";
+      }
+    }
+    
+    function normalizeText(text) {
+      if (!text) return '';
+      return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase();
+    }
+    
+    window.handleSearch = function() {
+      const searchBar = document.getElementById('searchBar');
+      if (!searchBar) return;
+      
+      const query = normalizeText(searchBar.value);
+      const productCards = document.querySelectorAll('.product-card');
+
+      document.querySelectorAll('.highlight').forEach(el => {
+          const parent = el.parentNode;
+          parent.replaceChild(document.createTextNode(el.textContent), el);
+          parent.normalize();
+      });
+
+      if (query.length === 0) {
+          productCards.forEach(card => {
+              card.style.display = 'flex';
+          });
+          return;
+      }
+
+      productCards.forEach(card => {
+          const titleEl = card.querySelector('.product-title');
+          const detailsEl = card.querySelector('.product-details');
+          const title = titleEl ? titleEl.textContent : '';
+          const details = detailsEl ? detailsEl.textContent : '';
+          
+          const cardText = normalizeText(title + ' ' + details);
+          
+          if (cardText.includes(query)) {
+              card.style.display = 'flex';
+              if (query.length > 2) {
+                  highlightText(titleEl, query);
+                  highlightText(detailsEl, query);
+              }
+          } else {
+              card.style.display = 'none';
+          }
+      });
+    }
+
+    function highlightText(element, query) {
+        if (!element) return;
+        const innerHTML = element.innerHTML;
+        const normalizedHTML = normalizeText(innerHTML);
+        const index = normalizedHTML.indexOf(query);
+        if (index >= 0) {
+            const originalText = innerHTML.substr(index, query.length);
+            const newHTML = innerHTML.replace(new RegExp(query, 'gi'), `<span class="highlight">${originalText}</span>`);
+            element.innerHTML = newHTML;
+        }
+    }
+
+    // ======================================
+    // CANVAS DE PARTÍCULAS INTERATIVAS
+    // ======================================
+    function initParticles() {
+        const canvas = document.getElementById('particles-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+        
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        const particles = [];
+        const particleCount = 45;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = (Math.random() - 0.5) * 0.4;
+                this.speedY = -Math.random() * 0.6 - 0.2;
+                this.alpha = Math.random() * 0.5 + 0.2;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.y < 0) {
+                    this.y = height;
+                    this.x = Math.random() * width;
+                }
+                if (this.x < 0 || this.x > width) {
+                    this.speedX = -this.speedX;
+                }
+            }
+
+            draw() {
+                const color = themes[currentTheme].color;
+                ctx.fillStyle = color;
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
         }
 
-        h1 {
-            font-size: 2.5rem;
-            color: #cc0000;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
         }
 
-        p {
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            color: #888;
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
         }
 
-        .qr-frame {
-            background: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            display: inline-block;
-            box-shadow: 0 0 25px rgba(204, 0, 0, 0.4);
-        }
+        animate();
+    }
+    
+    // Intersection Observer para surgimento de elementos na rolagem
+    function initScrollAnimation() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
 
-        img {
-            display: block;
-            width: 300px;
-            height: 300px;
-        }
+        document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
+    }
 
-        .info {
-            margin-top: 30px;
-            font-style: italic;
-            border-top: 1px solid #333;
-            padding-top: 20px;
+    // ======================================
+    // EVENTO DE CARREGAMENTO PRINCIPAL
+    // ======================================
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Inicializa o Carrinho e Carrega do LocalStorage
+      const savedCart = localStorage.getItem('arabe7_cart');
+      if (savedCart) {
+          try {
+              cart = JSON.parse(savedCart);
+          } catch (e) {
+              cart = []; 
+          }
+      }
+      updateCartDisplay(); 
+      
+      // 2. Inicializa Funções de UI
+      verificarPing();
+      setInterval(verificarPing, 6000);
+      atualizarStatus();
+      window.addEventListener('online', atualizarStatus);
+      window.addEventListener('offline', atualizarStatus);
+      
+      // 3. Último Acesso
+      const agora = new Date();
+      const ultimoAcesso = localStorage.getItem("ultimoAcesso");
+      const ultimoAcessoEl = document.getElementById("ultimoAcesso");
+
+      if (ultimoAcessoEl) {
+        if (ultimoAcesso) {
+          ultimoAcessoEl.innerText = new Date(ultimoAcesso).toLocaleString('pt-BR');
+        } else {
+          ultimoAcessoEl.innerText = "Primeira vez aqui!";
         }
-    </style>
+      }
+      localStorage.setItem("ultimoAcesso", agora);
+
+      // 4. Efeitos Visuais & Scroll
+      initParticles();
+      initScrollAnimation();
+      
+      // 5. Garante que o número de telefone no topo seja o correto
+      const phoneDisplay = document.querySelector('.phone h4');
+      if (phoneDisplay) {
+          phoneDisplay.textContent = newPhoneNumber;
+      }
+
+      // 6. Barra de progresso de scroll
+      const scrollProgress = document.createElement('div');
+      scrollProgress.id = 'scrollProgress';
+      scrollProgress.style.cssText = `
+          position: fixed;
+          top: 0;
+          left: 0;
+          height: 3px;
+          background-color: var(--theme-color); 
+          z-index: 10006;
+          width: 0%;
+          transition: width 0.1s ease, background-color 0.5s ease;
+          box-shadow: 0 0 8px var(--theme-color);
+      `;
+      document.body.prepend(scrollProgress); 
+
+      window.addEventListener('scroll', () => {
+          const scroll = document.documentElement.scrollTop;
+          const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+          const scrolled = (scroll / height) * 100;
+          document.getElementById('scrollProgress').style.width = `${scrolled}%`;
+      });
+      
+      // 7. Sistema de Temas (Inicialização)
+      const savedTheme = localStorage.getItem('arabe7_theme');
+      if (savedTheme && themes[savedTheme]) {
+          currentTheme = savedTheme;
+          applyInitialTheme(themes[currentTheme]); 
+      } else {
+          applyInitialTheme(themes['arabe7']);
+      }
+
+      const themeButton = document.getElementById('themeToggleButton');
+      if (themeButton) {
+          themeButton.onclick = switchTheme;
+      }
+    });
+  </script>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Venha Ver o Pôr do Sol</h1>
-        <p>Um jogo de terror inspirado na obra de Lygia Fagundes Telles.</p>
+<!-- Partículas em Background -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- Barra Superior de Notificações Customizadas -->
+<div id="notification-container"></div>
+<div id="fullscreen" onclick="hideFullscreen()"></div>
+
+<!-- Ping Tracker Flutuante -->
+<div class="fade-in-up active" id="ping-indicador">
+  <span style="display:inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: #00ff00; box-shadow: 0 0 8px #00ff00;"></span>
+  PING: <span id="ping-valor">...</span>
+</div>
+
+<!-- Floating Action Buttons -->
+<div class="glass-btn fade-in-up active" id="btn-secondary" onclick="showPage('secondary')" title="Ver Galeria/Info">
+  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+    <polyline points="21 15 16 10 5 21"></polyline>
+  </svg>
+</div>
+
+<div class="glass-btn fade-in-up active" id="btn-cart" onclick="showPage('cart')" title="Carrinho de Compras">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"></circle>
+        <circle cx="20" cy="21" r="1"></circle>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+    </svg>
+    <span id="cart-count" style="display: none;">0</span>
+</div>
+
+<!-- CONTEÚDO PRINCIPAL (HOME) -->
+<div id="home-page">
+  <section style="padding-top: 0;">
+    <div class="header-img-container fade-in-up active">
+      <img class="header-img" id="headerImg" src="https://i.imgur.com/c5xOpww.gif" alt="Banner ARABE7">
+      <div class="header-overlay"></div>
+    </div>
+    
+    <div class="profile-pic-container fade-in-up active">
+      <img class="profile-pic" id="profilePic" src="https://i.imgur.com/0ZwX8MN.jpeg" onclick="showFullscreen()" alt="Foto de Perfil">
+    </div>
+    
+    <h1 class="fade-in-up active">A R A B E 7</h1>
+    
+    <div class="phone fade-in-up active" onclick="copyPhone()"> 
+      <h4>+55 11 98737-0544</h4> 
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+      </svg>
+    </div>
+    
+    <div id="status" class="fade-in-up active" style="font-size: 11px; font-weight: 800; letter-spacing: 2px; margin-bottom: 15px;">VERIFICANDO CONEXÃO...</div>
+
+    <input type="text" id="searchBar" placeholder="Pesquisar produtos e métodos..." oninput="handleSearch()" class="fade-in-up active"/>
+
+    <div class="section-separator-container fade-in-up active">
+      <div class="separator-line"></div>
+      <div class="separator-band">
+        <h2 class="separator-title">H O M E</h2>
+      </div>
+      <div class="separator-line"></div>
+    </div>
+    
+    <div class="buttons fade-in-up active" style="margin-bottom: 10px;">
+      <a class="button" href="https://wa.me/5511987370544" target="_blank">
+        <img src="https://i.imgur.com/0ZwX8MN.jpeg" alt="Contato">
+        CONTATO📲
+      </a>
+      <a class="button" href="#" onclick="showNotification('Em breve mais detalhes sobre os novos métodos da Nero\'s!'); return false;">
+        <img src="https://i.imgur.com/HzWmBEs.jpeg" alt="Nero's">
+        NERO'S 🖤
+      </a>
+      <a class="button" href="https://whatsapp.com/channel/0029Vb3TVyH4SpkL2hyvst19" target="_blank">
+        <img src="https://i.imgur.com/KAByJrS.gif" alt="Canal WhatsApp">
+        𝑬𝑹𝑬𝑻𝐇𝑶𝑹 ⚡
+      </a>
+      <a class="button" href="#" id="themeToggleButton" onclick="event.preventDefault();">
+        <img src="https://i.imgur.com/0ZwX8MN.jpeg" alt="Tema">
+        TEMA ARABE7
+      </a>
+    </div>
+
+    <!-- SEÇÃO DE AUDIO / PLAYLIST INTEGRADA DO SPOTIFY - Liquid Glass -->
+    <div class="spotify-player-container fade-in-up active">
+      <div class="spotify-player-header">
+        <span class="spotify-title">
+          <svg class="spotify-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.669 11.538a.498.498 0 0 1-.686.165c-1.879-1.147-4.243-1.407-7.028-.77a.499.499 0 0 1-.222-.973c3.048-.696 5.662-.397 7.77.892a.5.5 0 0 1 .166.686zm.979-2.178a.624.624 0 0 1-.858.205c-2.15-1.321-5.428-1.704-7.972-.932a.625.625 0 0 1-.362-1.194c2.905-.881 6.517-.454 8.986 1.063a.624.624 0 0 1 .206.858zm.084-2.268C10.154 5.56 5.9 5.419 3.438 6.166a.748.748 0 1 1-.434-1.432c2.825-.857 7.523-.692 10.492 1.07a.747.747 0 1 1-.764 1.288z"/>
+          </svg>
+          S O U N D T R A C K
+        </span>
+        <span style="font-size: 10px; color: var(--theme-color); font-weight: 800; letter-spacing: 1px; transition: color 0.5s;">OFFICIAL PLAYLIST</span>
+      </div>
+      <iframe class="spotify-player-iframe" src="https://open.spotify.com/embed/playlist/5qJfecnlvxSHcHNwcX7nR2?utm_source=generator&theme=0" height="152" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    </div>
+
+  </section>
+
+  <!-- SEÇÃO MEU IP - Liquid Glass -->
+  <section>
+    <div class="section-separator-container fade-in-up">
+      <div class="separator-line"></div>
+      <div class="separator-band">
+        <h2 class="separator-title">M E UㅤI P</h2>
+      </div>
+      <div class="separator-line"></div>
+    </div>
+    
+    <div class="ip-box fade-in-up">
+      <span id="ipValue" class="ip-value">••••••••</span>
+      <button onclick="toggleIP()" class="eye-button">
+        <span id="eyeIcon" class="eye-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM22.676 12.553a11.249 11.249 0 0 1-2.631 4.31l-3.099-3.099a5.25 5.25 0 0 0-6.71-6.71L7.759 4.577a11.217 11.217 0 0 1 4.242-.827c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd" /></svg>
+        </span>
+      </button>
+    </div>
+    
+    <div class="info-boxes-container">
+      <div class="info-box fade-in-up">
+        <h2>SOBRE MIM</h2>
+        <p>
+          Conhecido como Árabe, sou o dono e administrador da Divisa Hacking e um dos administradores da Nero's e Erethor. Comprometido em compartilhar conhecimento prático, métodos refinados e conexões de alto valor no ecossistema digital.
+        </p>
+      </div>
+    
+      <div class="info-box fade-in-up">
+        <h2>𝐃𝐈𝐕𝐈𝐒𝐀 𝐇𝐀𝐂𝐊𝐈𝐍𝐆</h2>
+        <p>O grupo Divisa Hacking serve para compartilhamento de conteúdo avançado, interação estratégica entre membros e troca de informações relevantes. Um hub indispensável para entusiastas digitais.</p>
+      </div>
+      
+      <div class="info-box fade-in-up">
+        <h2>𝐍𝐄𝐑𝐎'𝐒</h2>
+        <p>A Nero's é focada em soluções avançadas de segurança cibernética e canais diretos para contatos de valor. Desenvolvendo ferramentas excepcionais para o mercado underground.</p>
+      </div>
+      
+      <div class="fade-in-up" style="font-size: 12px; color: #777; margin-top: 10px;">
+        Seu último acesso foi em: <span id="ultimoAcesso" style="color: var(--theme-color); font-weight: 600; transition: color 0.5s ease;">Detectando...</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEÇÃO PRODUTOS -->
+  <section>
+    <div class="section-separator-container fade-in-up">
+      <div class="separator-line"></div>
+      <div class="separator-band">
+        <h2 class="separator-title">P R O D U T O S</h2>
+      </div>
+      <div class="separator-line"></div>
+    </div>
+    
+    <div class="products fade-in-up">
+      <!-- Produto 1 - Liquid Glass -->
+      <div class="product-card fade-in-up" data-product-id="1">
+        <div class="product-info">
+          <div>
+            <div class="product-title">Números Whatsapp sem chip</div>
+            <div class="product-price">
+              <del>R$ 29,90</del><span>R$ 19,90</span>
+            </div>
+            <div class="product-details">
+                Estoque: <span class="stock-count">15</span> | Economia: <span class="saved-money">R$ 10,00</span>
+            </div>
+          </div>
+          <div class="product-actions">
+              <a class="button buy-now" href="https://wa.me/5511987370544" target="_blank" style="width: 50%;">
+                COMPRAR
+              </a>
+              <button class="button add-to-cart" onclick="addToCartById(1)" style="width: 50%;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                  + CARRINHO
+              </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Produto 2 - Liquid Glass -->
+      <div class="product-card fade-in-up" data-product-id="2">
+        <div class="product-info">
+          <div>
+            <div class="product-title">Métodos do 7</div>
+            <div class="product-price">
+              <del>R$ 24,90</del><span>R$ 17,90</span>
+            </div>
+            <div class="product-details">
+                Estoque: <span class="stock-low stock-count">6</span> (Acabando!) | Economia: <span class="saved-money">R$ 7,00</span>
+            </div>
+          </div>
+          <div class="product-actions">
+              <a class="button buy-now" href="https://wa.me/5511987370544" target="_blank" style="width: 50%;">
+                COMPRAR
+              </a>
+              <button class="button add-to-cart" onclick="addToCartById(2)" style="width: 50%;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                  + CARRINHO
+              </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Produto 3 - Liquid Glass -->
+      <div class="product-card fade-in-up" data-product-id="3">
+        <div class="product-info">
+          <div>
+            <div class="product-title">Painéis de Investigações</div>
+            <div class="product-price">
+              <del>R$ 39,90</del><span>R$ 27,90</span>
+            </div>
+            <div class="product-details">
+                Estoque: <span class="stock-count">20</span> | Economia: <span class="saved-money">R$ 12,00</span>
+            </div>
+          </div>
+          <div class="product-actions">
+              <a class="button buy-now" href="https://wa.me/5511987370544" target="_blank" style="width: 50%;">
+                COMPRAR
+              </a>
+              <button class="button add-to-cart" onclick="addToCartById(3)" style="width: 50%;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                  + CARRINHO
+              </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Produto 4 - Liquid Glass -->
+      <div class="product-card fade-in-up" data-product-id="4">
+        <div class="product-info">
+          <div>
+            <div class="product-title">Banners Bolha</div>
+            <div class="product-price">
+              <del>R$ 18,90</del><span>R$ 14,90</span>
+            </div>
+            <div class="product-details">
+                Estoque: <span class="stock-low stock-count">3</span> (Últimas unidades!) | Economia: <span class="saved-money">R$ 4,00</span>
+            </div>
+          </div>
+          <div class="product-actions">
+              <a class="button buy-now" href="https://wa.me/5511987370544" target="_blank" style="width: 50%;">
+                COMPRAR
+              </a>
+              <button class="button add-to-cart" onclick="addToCartById(4)" style="width: 50%;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                  + CARRINHO
+              </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Gratuitos - Liquid Glass -->
+      <div class="product-card fade-in-up">
+        <div class="product-info">
+          <div>
+            <div class="product-title">💳💥 <i>Tudo sobre CC, 1nf0CC e métodos</i> 💥💳</div>
+            <div class="product-price"><del>???</del><span>grátis</span></div>
+            <div class="product-details" style="color: #00ff00; font-weight: 600;">Conteúdo exclusivo e irrestrito.</div>
+          </div>
+          <a class="button" style="background-color: rgba(255,255,255,0.03); width: 100%; justify-content: center; margin-top: 15px;" href="https://whatsapp.com/channel/0029VbA1TggBvvskwsWyX221/1965" target="_blank"> 
+              <h4> Acessar Conteúdo </h4> 
+          </a>
+        </div>
+      </div>
+      
+      <div class="product-card fade-in-up">
+        <div class="product-info">
+          <div>
+            <div class="product-title"><i>TESTE DE CC – SABER SE TÁ LIVE OU QUEIMADA</i><br><small>Atualizado – método básico</small></div>
+            <div class="product-price"><del>???</del><span>grátis</span></div>
+            <div class="product-details" style="color: #00ff00; font-weight: 600;">Conteúdo exclusivo e irrestrito.</div>
+          </div>
+          <a class="button" style="background-color: rgba(255,255,255,0.03); width: 100%; justify-content: center; margin-top: 15px;" href="https://whatsapp.com/channel/0029VbA1TggBvvskwsWyX221/2032" target="_blank"> 
+              <h4> Acessar Conteúdo </h4> 
+          </a>
+        </div>
+      </div>
+      
+      <div class="product-card fade-in-up">  
+        <div class="product-info">      
+          <div>
+            <div class="product-title">🖤 | WORK CONSULTORIA | 🇲🇪 <br><small>By anguish</small></div>      
+            <div class="product-price"><del>???</del><span>grátis</span></div>      
+            <div class="product-details" style="color: #00ff00; font-weight: 600;">Conteúdo exclusivo e irrestrito.</div>
+          </div>
+          <a class="button" style="background-color: rgba(255,255,255,0.03); width: 100%; justify-content: center; margin-top: 15px;" href="https://whatsapp.com/channel/0029VbA1TggBvvskwsWyX221/1974" target="_blank">       
+            <h4> Acessar Conteúdo </h4>       
+          </a>       
+        </div>       
+      </div>
+    </div>
+  </section>
+
+  <!-- ERETHOR BRAND SECTION - Liquid Glass content -->
+  <section class="brand-section">
+    <h1 class="brand-title-wrap fade-in-up">
+      <span style="position:relative; z-index:2;">ERETHOR</span>
+      <span class="brand-glow">ERETHOR</span>
+    </h1>
+    
+    <div class="brand-content fade-in-up">
+      <p> 
+        <strong style="color: var(--theme-color); transition: color 0.5s;">Erethor</strong> é uma equipe de vanguarda projetada para compartilhamento de ferramentas digitais e conhecimento prático estruturado. Compartilhamos semanalmente scripts de inteligência, bots otimizados de automação e análises de mercado.
+      </p>
+      <p>
+        Fundada originalmente por <span style="color: var(--theme-color); transition: color 0.5s;"><strong>Norion</strong></span> (ou <em>Jzidan</em>), a marca Erethor cresceu de modo descentralizado com base na colaboração direta entre membros integrados em nossa comunidade privada de tecnologia underground.
+      </p>
+      
+      <div style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;" class="brand-links">
+        <p><strong>Contato Operacional:</strong> <a href="https://wa.me/5511961646340" target="_blank">+55 11 96164-6340</a></p>
+        <p>
+          <strong>Nossos Links:</strong> 
+          <a href="https://t.me/afabricadivine" target="_blank">Telegram</a> |
+          <a href="https://linktr.ee/divinechannel" target="_blank">Linktree</a> |
+          <a href="https://whatsapp.com/channel/0029Vb3TVyH4SpkL2hyvst19" target="_blank">WhatsApp</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- NERO'S BRAND SECTION - Liquid Glass content -->
+  <section class="brand-section" style="background: #040405;">
+    <h1 class="brand-title-wrap fade-in-up"> 
+      <span style="position:relative; z-index:2;">NERO'S</span>
+      <span class="brand-glow">NERO'S</span>
+    </h1>
+    
+    <div class="brand-content fade-in-up">
+      <p>
+        <strong style="color: var(--theme-color); transition: color 0.5s;">NERO'S</strong> é um projeto focado em consultorias avançadas, segurança de dados em nuvem e estratégias de invisibilidade cibernética.
+      </p>
+      <p>
+        Nossos novos painéis, integrações e atualizações estão em fase de homologação secreta e serão disponibilizados para compradores cadastrados através de canais criptografados em breve.
+      </p>
+      
+      <div style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;" class="brand-links">
+        <p><strong>Admin Geral:</strong> <a href="https://wa.me/5511987370544" target="_blank">+55 11 98737-0544</a></p>
+        <p><strong>Copyright &copy; NERO'S Enterprise.</strong></p>
+      </div>
+    </div>
+  </section>
+</div> 
+
+<!-- MODAIS E OVERLAYS -->
+
+<!-- PÁGINA SECUNDÁRIA - Liquid Glass container -->
+<div id="secondary-page" class="overlay-page" onclick="hideSecondaryOverlay(event)">
+    <div class="glass-container">
+        <button class="close-overlay-btn" onclick="closeOverlay('secondary-page')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
         
-        <div class="qr-frame">
-            <!-- Seu QR Code -->
-            <img src="https://i.imgur.com/3mW77gn.jpeg" alt="QR Code do Jogo">
+        <h2 style="color: var(--theme-color); margin-bottom: 15px; font-weight: 800; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; transition: color 0.5s ease;">
+            INFORMAÇÕES E SEGURANÇA
+        </h2>
+        
+        <p style="color:#ccc; text-align: left; line-height: 1.7; margin-bottom: 15px; font-size: 14px;">
+            Este ecossistema foi projetado para alta performance de rede. A privacidade dos nossos usuários é mantida por meio de servidores criptografados e proteção integral contra rastreamentos indesejados.
+        </p>
+
+        <p style="color:#ccc; text-align: left; line-height: 1.7; margin-bottom: 15px; font-size: 14px;">
+            <strong>Análise Segura de IP:</strong> Ao revelar seu endereço IP na página inicial, realizamos um handshake virtual criptografado direto e transparente. Seus dados não são armazenados nos servidores.
+        </p>
+
+        <a class="button buy-now" href="#" onclick="closeOverlay('secondary-page'); event.preventDefault();" style="margin-top: 25px; width: 100%; justify-content: center;">
+            CONFIRMAR & VOLTAR
+        </a>
+    </div>
+</div>
+
+<!-- OVERLAY DO CARRINHO - Liquid Glass container -->
+<div id="cart-page" class="overlay-page" onclick="hideCartOverlay(event)">
+    <div class="glass-container">
+        <button class="close-overlay-btn" onclick="closeOverlay('cart-page')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        
+        <h2 style="color: var(--theme-color); margin-bottom: 15px; font-weight: 800; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; transition: color 0.5s ease;">
+            SEU CARRINHO
+        </h2>
+        
+        <div id="cart-items">
+            <p style="color:#ccc; text-align: center; padding: 30px 0;" id="empty-cart-message">
+                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 12px; opacity: 0.5;">
+                    <circle cx="12" cy="12" r="10"></circle><path d="M16 16s-1.5-2-4-2-4 2-4 2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line>
+                </svg>
+                <br>O carrinho está vazio no momento.
+            </p>
         </div>
 
-        <div class="info">
-            <p>Escaneie para iniciar a sua descida ao abismo.</p>
+        <div class="cart-summary">
+            <div id="cart-subtotal">Subtotal: R$ 0,00</div>
+            <div id="cart-economy" class="economy">Você economizou: R$ 0,00!</div>
+            <div id="cart-total" class="total">Total: R$ 0,00</div>
         </div>
+
+        <a class="button buy-now" id="checkout-button" href="https://wa.me/5511987370544" target="_blank" style="margin-top: 25px; width: 100%; justify-content: center;">
+            FINALIZAR PEDIDO (WHATSAPP)
+        </a>
+        <a class="button" href="#" onclick="clearCart(event)" style="background-color: rgba(255,255,255,0.02); margin-top: 10px; width: 100%; justify-content: center; border: 1px solid rgba(255,255,255,0.06);">
+            LIMPAR CARRINHO
+        </a>
     </div>
+</div>
 
 </body>
 </html>
+
+```
